@@ -95,7 +95,7 @@
             left: 50%;
             width: 100px;
             height: 100px;
-            background: url('{{ asset('img/preloader_171x171.png') }}') no-repeat center center;
+            background: url('{{ asset('img/logo_circular.png') }}') no-repeat center center;
             background-size: contain;
             transform: translate(-50%, -50%);
             animation: pulse 2s infinite;
@@ -142,7 +142,7 @@
 
                                 <div class="text-center @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-5 pt-5 @endif">
                                     <a href="{{ route('web.index') }}">
-                                        <img class="img-fluid @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-sm-5 @endif" src="{{ asset('img/logo.svg') }}" alt="Logo Morros Devops">
+                                        <img class="img-fluid @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-sm-5 @endif" src="{{ asset('img/logo_yorlenis.png') }}" alt="Logo Morros Devops">
                                     </a>
                                     <h6 class="mt-1 mb-5 pb-1 text_title"><strong>{{ mb_strtoupper(env('APP_NAME', 'Laravel')) }}</strong></h6>
                                 </div>
