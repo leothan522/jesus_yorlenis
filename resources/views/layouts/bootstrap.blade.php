@@ -95,7 +95,7 @@
             left: 50%;
             width: 100px;
             height: 100px;
-            background: url('{{ asset('img/logo_circular.png') }}') no-repeat center center;
+            background: url('{{ asset('img/logo_yorlenis_mini.png') }}') no-repeat center center;
             background-size: contain;
             transform: translate(-50%, -50%);
             animation: pulse 2s infinite;
