@@ -138,10 +138,10 @@
                 <div class="card rounded-3 text-black">
                     <div class="row g-0">
                         <div class="col-lg-6">
-                            <div class="card-body p-md-5 mx-md-4 position-relative">
+                            <div class="card-body p-md-5 mx-md-4 position-relative" id="card_body">
 
                                 <div class="text-center @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-5 pt-5 @endif">
-                                    <a href="{{ route('web.index') }}">
+                                    <a href="{{ route('web.index') }}" onclick="verCargando()">
                                         <img class="img-fluid @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-sm-5 @endif" src="{{ asset('img/logo_yorlenis.png') }}" alt="Logo Morros Devops">
                                     </a>
                                     <h6 class="mt-1 mb-5 pb-1 text_title"><strong>{{ mb_strtoupper(env('APP_NAME', 'Laravel')) }}</strong></h6>
@@ -189,6 +189,12 @@
             }, false);
         })
     })()
+
+    function verCargando() {
+        document.querySelector("#card_body").classList.add('opacity-50');
+        document.querySelector(".verCargando").classList.remove('d-none');
+    }
+
     console.log('Hi!')
 </script>
 @yield('js')
