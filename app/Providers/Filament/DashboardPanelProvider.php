@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use App\Http\Middleware\AccessPanel;
 use App\Http\Middleware\UserAdmin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -53,7 +55,7 @@ class DashboardPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                UserAdmin::class,
+                AccessPanel::class,
                 'verified'
             ])
             ->authMiddleware([
@@ -64,7 +66,8 @@ class DashboardPanelProvider extends PanelProvider
             ->plugins([
                 FilamentEditProfilePlugin::make()
                 ->shouldRegisterNavigation(false)
-                ->shouldShowDeleteAccountForm(false)
+                ->shouldShowDeleteAccountForm(false),
+                //FilamentSpatieRolesPermissionsPlugin::make()
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
