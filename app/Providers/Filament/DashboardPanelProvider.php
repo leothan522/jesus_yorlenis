@@ -67,7 +67,7 @@ class DashboardPanelProvider extends PanelProvider
                 FilamentEditProfilePlugin::make()
                 ->shouldRegisterNavigation(false)
                 ->shouldShowDeleteAccountForm(false),
-                //FilamentSpatieRolesPermissionsPlugin::make()
+                FilamentSpatieRolesPermissionsPlugin::make()
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
