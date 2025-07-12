@@ -16,4 +16,11 @@ class ListParametros extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            ParametroResource\Widgets\FormatoControlPrenatal::class
+        ];
+    }
 }

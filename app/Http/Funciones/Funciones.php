@@ -1,6 +1,18 @@
 <?php
 //Funciones Personalizadas para el Proyecto
 
+function numSizeCodigo(): int
+{
+    $num = 6;
+    $parametro = \App\Models\Parametro::where('nombre', 'size_codigo')->first();
+    if ($parametro){
+        if (!empty($parametro->valor_id) && $parametro->valor_id >= 1){
+            $num = intval($parametro->valor_id);
+        }
+    }
+    return $num;
+}
+
 function formatoMillares($cantidad, $decimal = 2): string
 {
     if (!is_numeric($cantidad)){

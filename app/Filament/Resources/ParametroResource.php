@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ParametroResource\Pages;
 use App\Filament\Resources\ParametroResource\RelationManagers;
+use App\Filament\Resources\ParametroResource\Widgets\FormatoControlPrenatal;
 use App\Models\Parametro;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -86,6 +87,13 @@ class ParametroResource extends Resource
             'index' => Pages\ListParametros::route('/'),
             'create' => Pages\CreateParametro::route('/create'),
             'edit' => Pages\EditParametro::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            FormatoControlPrenatal::class
         ];
     }
 }
