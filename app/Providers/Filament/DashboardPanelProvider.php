@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use App\Http\Middleware\AccessPanel;
-use App\Http\Middleware\UserAdmin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -64,15 +63,16 @@ class DashboardPanelProvider extends PanelProvider
             ->profile(isSimple: false)
             ->favicon(asset('favicons/favicon-32x32.png'))
             ->plugins([
-                FilamentEditProfilePlugin::make()
-                ->shouldRegisterNavigation(false)
-                ->shouldShowDeleteAccountForm(false),
+                /*FilamentEditProfilePlugin::make()
+                    ->shouldRegisterNavigation(false)
+                    ->shouldShowDeleteAccountForm(false),*/
                 FilamentSpatieRolesPermissionsPlugin::make()
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
-                ->label(fn() => auth()->user()->name)
-                ->url(fn(): string => EditProfilePage::getUrl())
+                    ->label(fn() => auth()->user()->name)
+                    //->url(fn(): string => EditProfilePage::getUrl())
+                    ->url(fn(): string => url('user/profile'))
             ]);
     }
 }
