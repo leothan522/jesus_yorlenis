@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ControlprenatalResource\Pages;
 use App\Filament\Resources\ControlprenatalResource\RelationManagers;
+use App\Filament\Resources\ControlPrenatalResource\Widgets\AntecedentesFamiliaresWidget;
+use App\Livewire\AntecedentesFamiliaresComponent;
 use App\Models\Controlprenatal;
 use App\Models\Paciente;
 use App\Models\Parametro;
@@ -15,6 +17,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
@@ -347,6 +350,16 @@ class ControlPrenatalResource extends Resource
                 ])
                     ->from('sm')
                     ->columnSpanFull(),
+                Section::make('Antecedentes')
+                    ->schema([
+                        Split::make([
+                            Livewire::make(AntecedentesFamiliaresComponent::class),
+                        ])
+                            ->from('sm')
+                            ->columnSpanFull()
+                    ])
+                    ->collapsible()
+                    ->compact()
             ]);
     }
 

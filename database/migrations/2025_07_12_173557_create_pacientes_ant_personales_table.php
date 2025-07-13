@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('pacientes_id')->unsigned();
             $table->bigInteger('antecedentes_id')->unsigned();
-            $table->boolean('is_bool')->nullable();
             $table->string('texto')->nullable();
             $table->foreign('pacientes_id')->references('id')->on('pacientes')->cascadeOnDelete();
             $table->foreign('antecedentes_id')->references('id')->on('antecedentes_personales')->cascadeOnDelete();

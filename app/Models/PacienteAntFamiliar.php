@@ -11,12 +11,16 @@ class PacienteAntFamiliar extends Model
     protected $fillable = [
         'pacientes_id',
         'antecedentes_id',
-        'is_bool',
         'texto',
     ];
 
     public function paciente(): BelongsTo
     {
         return $this->belongsTo(Paciente::class, 'pacientes_id', 'id');
+    }
+
+    public function antecedenteFamiliar(): BelongsTo
+    {
+        return $this->belongsTo(AntecedentesFamiliar::class, 'antecedentes_id', 'id');
     }
 }

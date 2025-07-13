@@ -11,7 +11,6 @@ class PacienteAntPersonal extends Model
     protected $fillable = [
         'pacientes_id',
         'antecedentes_id',
-        'is_bool',
         'texto',
     ];
 
