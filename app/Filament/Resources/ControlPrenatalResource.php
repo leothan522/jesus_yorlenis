@@ -6,6 +6,7 @@ use App\Filament\Resources\ControlprenatalResource\Pages;
 use App\Filament\Resources\ControlprenatalResource\RelationManagers;
 use App\Filament\Resources\ControlPrenatalResource\Widgets\AntecedentesFamiliaresWidget;
 use App\Livewire\AntecedentesFamiliaresComponent;
+use App\Livewire\AntecedentesPersonalesComponent;
 use App\Models\Controlprenatal;
 use App\Models\Paciente;
 use App\Models\Parametro;
@@ -354,6 +355,7 @@ class ControlPrenatalResource extends Resource
                     ->schema([
                         Split::make([
                             Livewire::make(AntecedentesFamiliaresComponent::class),
+                            Livewire::make(AntecedentesPersonalesComponent::class)
                         ])
                             ->from('sm')
                             ->columnSpanFull()
