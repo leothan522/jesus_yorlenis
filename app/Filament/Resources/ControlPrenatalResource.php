@@ -13,6 +13,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -189,6 +191,7 @@ class ControlPrenatalResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()
                         ->before(function ($record){
@@ -232,6 +235,7 @@ class ControlPrenatalResource extends Resource
         return [
             'index' => Pages\ListControlPrenatals::route('/'),
             'create' => Pages\CreateControlPrenatal::route('/create'),
+            'view' => Pages\ViewControlPrenatal::route('/{record}'),
             'edit' => Pages\EditControlPrenatal::route('/{record}/edit'),
         ];
     }
