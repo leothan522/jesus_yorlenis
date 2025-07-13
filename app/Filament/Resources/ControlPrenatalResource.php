@@ -13,9 +13,14 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -165,6 +170,7 @@ class ControlPrenatalResource extends Resource
                     ->numeric()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('paciente.nombre')
+                    ->label('Nombre y Apellido')
                     ->searchable()
                     ->formatStateUsing(fn($state) => mb_strtoupper($state))
                     ->wrap(),
@@ -194,13 +200,13 @@ class ControlPrenatalResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()
-                        ->before(function ($record){
+                        ->before(function ($record) {
                             $i = 0;
-                            do{
-                                $repeat = Str::repeat('*',++$i);
+                            do {
+                                $repeat = Str::repeat('*', ++$i);
                                 $string = $repeat . $record->codigo;
                                 $existe = Controlprenatal::withTrashed()->where('codigo', $string)->first();
-                            }while($existe);
+                            } while ($existe);
                             $record->update(['codigo' => $string]);
                         }),
                 ])
@@ -208,14 +214,14 @@ class ControlPrenatalResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->before(function (Collection $records){
-                            foreach ($records as $record){
+                        ->before(function (Collection $records) {
+                            foreach ($records as $record) {
                                 $i = 0;
-                                do{
-                                    $repeat = Str::repeat('*',++$i);
+                                do {
+                                    $repeat = Str::repeat('*', ++$i);
                                     $string = $repeat . $record->codigo;
                                     $existe = Controlprenatal::withTrashed()->where('codigo', $string)->first();
-                                }while($existe);
+                                } while ($existe);
                                 $record->update(['codigo' => $string]);
                             }
                         }),
@@ -239,4 +245,109 @@ class ControlPrenatalResource extends Resource
             'edit' => Pages\EditControlPrenatal::route('/{record}/edit'),
         ];
     }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Split::make([
+                    Section::make()
+                        ->schema([
+                            TextEntry::make('codigo')
+                                ->label('Código')
+                                ->weight(FontWeight::Bold)
+                                ->copyable()
+                                ->color('primary'),
+                        ])
+                        ->grow(false),
+                    Section::make('Paciente')
+                        ->schema([
+                            Fieldset::make('Datos Básicos')
+                                ->schema([
+                                    TextEntry::make('paciente.cedula')
+                                        ->label('Cédula')
+                                        ->numeric()
+                                        ->weight(FontWeight::Bold)
+                                        ->copyable()
+                                        ->color('primary'),
+                                    TextEntry::make('paciente.nombre')
+                                        ->label('Nombre y Apellido')
+                                        ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
+                                        ->weight(FontWeight::Bold)
+                                        ->copyable()
+                                        ->color('primary'),
+                                    TextEntry::make('paciente.edad')
+                                        ->label('Edad')
+                                        ->numeric()
+                                        ->weight(FontWeight::Bold)
+                                        ->copyable()
+                                        ->color('primary'),
+                                    TextEntry::make('paciente.telefono')
+                                        ->label('Teléfono')
+                                        ->weight(FontWeight::Bold)
+                                        ->copyable()
+                                        ->color('primary'),
+                                    TextEntry::make('paciente.direccion')
+                                        ->label('Dirección')
+                                        ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
+                                        ->weight(FontWeight::Bold)
+                                        ->copyable()
+                                        ->color('primary')
+                                        ->columnSpan(2),
+                                ])
+                                ->columns(3),
+                            Fieldset::make('Datos Médicos')
+                                ->schema([
+                                    Grid::make([
+                                        'default' => 2,
+                                        'sm' => 3,
+                                    ])
+                                        ->schema([
+                                            TextEntry::make('paciente.fur')
+                                                ->label('FUR')
+                                                ->date()
+                                                ->weight(FontWeight::Bold)
+                                                ->copyable()
+                                                ->color('primary'),
+                                            TextEntry::make('paciente.fpp')
+                                                ->label('FPP')
+                                                ->date()
+                                                ->weight(FontWeight::Bold)
+                                                ->copyable()
+                                                ->color('primary'),
+                                            TextEntry::make('paciente.gestas')
+                                                ->label('Gestas')
+                                                ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
+                                                ->weight(FontWeight::Bold)
+                                                ->copyable()
+                                                ->color('primary'),
+                                            TextEntry::make('paciente.partos')
+                                                ->label('partos')
+                                                ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
+                                                ->weight(FontWeight::Bold)
+                                                ->copyable()
+                                                ->color('primary'),
+                                            TextEntry::make('paciente.cesareas')
+                                                ->label('Cesareas')
+                                                ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
+                                                ->weight(FontWeight::Bold)
+                                                ->copyable()
+                                                ->color('primary'),
+                                            TextEntry::make('paciente.abortos')
+                                                ->label('Abortos')
+                                                ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
+                                                ->weight(FontWeight::Bold)
+                                                ->copyable()
+                                                ->color('primary'),
+                                        ]),
+                                ])
+                        ])
+                        ->compact()
+                        ->collapsible()
+                ])
+                    ->from('sm')
+                    ->columnSpanFull(),
+            ]);
+    }
+
 }

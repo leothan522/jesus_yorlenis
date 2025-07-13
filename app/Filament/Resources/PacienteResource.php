@@ -107,6 +107,7 @@ class PacienteResource extends Resource
                     ->numeric()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nombre')
+                    ->label('Nombre y Apellido')
                     ->searchable()
                     ->formatStateUsing(fn($state) => mb_strtoupper($state))
                     ->wrap(),

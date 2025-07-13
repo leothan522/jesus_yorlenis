@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('direccion')->nullable();
             $table->date('fur')->nullable();
             $table->date('fpp')->nullable();
-            $table->decimal('gestas')->nullable();
+            $table->integer('gestas')->nullable();
             $table->integer('partos')->nullable();
             $table->integer('cesareas')->nullable();
             $table->integer('abortos')->nullable();
