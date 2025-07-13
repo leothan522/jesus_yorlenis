@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\AntecedentesFamiliar;
-use App\Models\PacienteAntFamiliar;
+use App\Models\AntecedentesOtro;
+use App\Models\PacienteAntOtro;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -16,7 +16,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 
-class AntecedentesFamiliaresComponent extends Component implements HasForms, HasTable
+class AntecedentesOtrosComponent extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
@@ -24,18 +24,18 @@ class AntecedentesFamiliaresComponent extends Component implements HasForms, Has
 
     public function render()
     {
-        return view('livewire.antecedentes-familiares-component');
+        return view('livewire.antecedentes-otros-component');
     }
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
-                AntecedentesFamiliar::query()
+                AntecedentesOtro::query()
             )
             ->columns([
                 TextColumn::make('nombre')
-                    ->label('Antecedentes Familiares')
+                    ->label('Antecedentes Otros')
                     ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
                     ->description(function ($record): string {
                         $response = '';
@@ -81,7 +81,7 @@ class AntecedentesFamiliaresComponent extends Component implements HasForms, Has
                         return $data;
                     })
                     ->modalWidth(MaxWidth::Small)
-                    ->modalHeading('Antecedente Familiar (Otro)')
+                    ->modalHeading(fn($record): string => mb_strtoupper($record->nombre))
                     ->action(function (array $data, $record): void {
                         $antecedente = $this->existe($record->id);
                         if ($antecedente) {
@@ -104,14 +104,14 @@ class AntecedentesFamiliaresComponent extends Component implements HasForms, Has
 
     protected function existe($antecedentes_id)
     {
-        return PacienteAntFamiliar::where('pacientes_id', $this->record->pacientes_id)
+        return PacienteAntOtro::where('pacientes_id', $this->record->pacientes_id)
             ->where('antecedentes_id', $antecedentes_id)
             ->first();
     }
 
     protected function crearAntecedente($antecedentes_id, $texto = null): void
     {
-        $antecedente = new PacienteAntFamiliar();
+        $antecedente = new PacienteAntOtro();
         $antecedente->pacientes_id = $this->record->pacientes_id;
         $antecedente->antecedentes_id = $antecedentes_id;
         if (!empty($texto)) {

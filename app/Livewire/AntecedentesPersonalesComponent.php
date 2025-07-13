@@ -36,6 +36,7 @@ class AntecedentesPersonalesComponent extends Component implements HasForms, Has
             ->columns([
                 TextColumn::make('nombre')
                     ->label('Antecedentes Personales')
+                    ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
                     ->description(function ($record): string {
                         $response = '';
                         $antecedente = $this->existe($record->id);
