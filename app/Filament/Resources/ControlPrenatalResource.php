@@ -8,6 +8,7 @@ use App\Filament\Resources\ControlPrenatalResource\Widgets\AntecedentesFamiliare
 use App\Livewire\AntecedentesFamiliaresComponent;
 use App\Livewire\AntecedentesOtrosComponent;
 use App\Livewire\AntecedentesPersonalesComponent;
+use App\Livewire\TipajeComponent;
 use App\Models\Controlprenatal;
 use App\Models\Paciente;
 use App\Models\Parametro;
@@ -17,6 +18,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Livewire;
@@ -25,6 +27,7 @@ use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -363,7 +366,21 @@ class ControlPrenatalResource extends Resource
                             ->columnSpanFull()
                     ])
                     ->collapsible()
-                    ->compact()
+                    ->compact(),
+                Split::make([
+                    Grid::make([
+                        'default' => 1,
+                        'sm' => 3,
+                    ])
+                    ->schema([
+                        Section::make('Vacunas')
+                            ->collapsible()
+                        ->columnSpan(['sm' => 2]),
+                        Livewire::make(TipajeComponent::class),
+                    ]),
+                ])
+                    ->from('sm')
+                    ->columnSpanFull()
             ]);
     }
 

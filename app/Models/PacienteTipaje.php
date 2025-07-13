@@ -12,7 +12,7 @@ class PacienteTipaje extends Model
         'pacientes_id',
         'madre',
         'padre',
-        'sencibilidad',
+        'sensibilidad',
     ];
 
     public function paciente(): BelongsTo

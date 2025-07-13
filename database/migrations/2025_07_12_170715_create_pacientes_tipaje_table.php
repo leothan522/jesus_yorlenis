@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('pacientes_id')->unsigned();
             $table->string('madre')->nullable();
             $table->string('padre')->nullable();
-            $table->string('sencibilidad')->nullable();
+            $table->string('sensibilidad')->nullable();
             $table->foreign('pacientes_id')->references('id')->on('pacientes')->cascadeOnDelete();
             $table->timestamps();
         });
