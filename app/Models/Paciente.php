@@ -52,4 +52,9 @@ class Paciente extends Model
         return $this->hasMany(PacienteAntOtro::class, 'pacientes_id', 'id');
     }
 
+    public function controlPrenatal(): HasMany
+    {
+        return $this->hasMany(ControlPrenatal::class, 'pacientes_id', 'id');
+    }
+
 }
