@@ -9,6 +9,7 @@ use App\Livewire\AntecedentesFamiliaresComponent;
 use App\Livewire\AntecedentesOtrosComponent;
 use App\Livewire\AntecedentesPersonalesComponent;
 use App\Livewire\TipajeComponent;
+use App\Livewire\VacunasComponent;
 use App\Models\Controlprenatal;
 use App\Models\Paciente;
 use App\Models\Parametro;
@@ -372,12 +373,16 @@ class ControlPrenatalResource extends Resource
                         'default' => 1,
                         'sm' => 3,
                     ])
-                    ->schema([
-                        Section::make('Vacunas')
-                            ->collapsible()
-                        ->columnSpan(['sm' => 2]),
-                        Livewire::make(TipajeComponent::class),
-                    ]),
+                        ->schema([
+                            Section::make('Vacunas')
+                                ->schema([
+                                    Livewire::make(VacunasComponent::class)
+                                ])
+                                ->collapsible()
+                                ->columnSpan(['sm' => 2])
+                                ->compact(),
+                            Livewire::make(TipajeComponent::class),
+                        ]),
                 ])
                     ->from('sm')
                     ->columnSpanFull()

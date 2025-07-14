@@ -96,7 +96,8 @@ class TipajeComponent extends Component implements HasForms, HasInfolists
                                     ->color('primary'),
                             ])
                     ])
-                    ->collapsible(),
+                    ->collapsible()
+                    ->compact(),
             ]);
     }
 

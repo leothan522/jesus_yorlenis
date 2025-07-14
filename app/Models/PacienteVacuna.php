@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PacienteVacuna extends Model
 {
-    protected $table = 'pacientes_vacuna';
+    protected $table = 'pacientes_vacunas';
     protected $fillable = [
         'pacientes_id',
+        'vacunas_id',
         'dosis_1',
         'dosis_2',
         'refuerzo',
@@ -18,5 +19,10 @@ class PacienteVacuna extends Model
     public function paciente(): BelongsTo
     {
         return $this->belongsTo(Paciente::class, 'pacientes_id', 'id');
+    }
+
+    public function vacuna(): BelongsTo
+    {
+        return $this->belongsTo(Vacuna::class, 'vacunas_id', 'id');
     }
 }
