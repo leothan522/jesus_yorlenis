@@ -64,7 +64,7 @@ class PacienteResource extends Resource
                                     ->numeric()
                                     ->readOnly(fn(Get $get) => !empty($get('fecha_nacimiento')))
                                     ->minValue(0)
-                                ->requiredWithout('fecha_nacimiento'),
+                                    ->requiredWithout('fecha_nacimiento'),
                                 Forms\Components\TextInput::make('telefono')
                                     ->label('Teléfono')
                                     ->tel()
@@ -74,7 +74,9 @@ class PacienteResource extends Resource
                                     ->columnSpanFull(),
                             ]),
                     ])
-                    ->columns(),
+                    ->columns()
+                    ->collapsible()
+                    ->compact(),
                 Forms\Components\Section::make('Datos Médicos')
                     ->schema([
                         Forms\Components\DatePicker::make('fur')
@@ -94,7 +96,9 @@ class PacienteResource extends Resource
                             ->numeric()
                             ->minValue(0),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->collapsible()
+                    ->compact(),
             ]);
     }
 
@@ -137,13 +141,13 @@ class PacienteResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()
-                        ->before(function ($record){
+                        ->before(function ($record) {
                             $i = 0;
-                            do{
-                                $repeat = Str::repeat('*',++$i);
+                            do {
+                                $repeat = Str::repeat('*', ++$i);
                                 $string = $repeat . $record->cedula;
                                 $existe = Paciente::withTrashed()->where('cedula', $string)->first();
-                            }while($existe);
+                            } while ($existe);
                             $record->update(['cedula' => $string]);
                         }),
                 ])
@@ -151,14 +155,14 @@ class PacienteResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->before(function (Collection $records){
-                            foreach ($records as $record){
+                        ->before(function (Collection $records) {
+                            foreach ($records as $record) {
                                 $i = 0;
-                                do{
-                                    $repeat = Str::repeat('*',++$i);
+                                do {
+                                    $repeat = Str::repeat('*', ++$i);
                                     $string = $repeat . $record->cedula;
                                     $existe = Paciente::withTrashed()->where('cedula', $string)->first();
-                                }while($existe);
+                                } while ($existe);
                                 $record->update(['cedula' => $string]);
                             }
                         }),

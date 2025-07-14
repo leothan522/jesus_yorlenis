@@ -283,6 +283,13 @@ class ControlPrenatalResource extends Resource
                                         ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
                                         ->weight(FontWeight::Bold)
                                         ->copyable()
+                                        ->color('primary')
+                                        ->columnSpan(2),
+                                    TextEntry::make('paciente.fecha_nacimiento')
+                                        ->label('Fecha de Nacimiento')
+                                        ->date()
+                                        ->weight(FontWeight::Bold)
+                                        ->copyable()
                                         ->color('primary'),
                                     TextEntry::make('paciente.edad')
                                         ->label('Edad')

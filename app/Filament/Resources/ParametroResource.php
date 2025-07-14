@@ -37,6 +37,7 @@ class ParametroResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columns()
+                    ->compact()
             ]);
     }
 

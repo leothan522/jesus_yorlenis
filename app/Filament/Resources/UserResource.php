@@ -56,7 +56,8 @@ class UserResource extends Resource
                             ->tel()
                             ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
                     ])
-                    ->columns(2),
+                    ->columns()
+                    ->compact(),
                 Forms\Components\Section::make('Permisos')
                     ->schema([
                         Forms\Components\Toggle::make('access_panel')
@@ -74,7 +75,8 @@ class UserResource extends Resource
                             //->requiredIf('access_panel', true)
                             ->hidden(fn(Get $get) => !$get('access_panel'))
                     ])
-                    ->columns(2),
+                    ->columns()
+                    ->compact(),
             ]);
     }
 
@@ -84,25 +86,30 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('Name'))
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('email')
                     ->label(__('Email'))
-                    ->searchable(),
+                    ->searchable()
+                    ->visibleFrom('sm'),
                 Tables\Columns\IconColumn::make('email_verified_at')
                     ->label('Verificado')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->visibleFrom('sm'),
                 Tables\Columns\ImageColumn::make('profile_photo_path')
                     ->label('Foto de Perfil')
                     ->circular()
                     //->defaultImageUrl(asset('img/img_placeholder.jpg'))
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->visibleFrom('sm'),
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label(__('Role')),
                 Tables\Columns\TextColumn::make('created_at')
                     ->since()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visibleFrom('sm'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('roles')
@@ -159,31 +166,31 @@ class UserResource extends Resource
                         ->requiresConfirmation(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()
-                    ->before(function ($record){
-                        $i = 0;
-                        do{
-                            $repeat = Str::repeat('*',++$i);
-                            $email = $repeat . $record->email;
-                            $existe = User::withTrashed()->where('email', $email)->first();
-                        }while($existe);
-                        $record->update(['email' => $email]);
-                    }),
+                        ->before(function ($record) {
+                            $i = 0;
+                            do {
+                                $repeat = Str::repeat('*', ++$i);
+                                $email = $repeat . $record->email;
+                                $existe = User::withTrashed()->where('email', $email)->first();
+                            } while ($existe);
+                            $record->update(['email' => $email]);
+                        }),
                 ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                    ->before(function (Collection $records){
-                        foreach ($records as $record){
-                            $i = 0;
-                            do{
-                                $repeat = Str::repeat('*',++$i);
-                                $email = $repeat . $record->email;
-                                $existe = User::withTrashed()->where('email', $email)->first();
-                            }while($existe);
-                            $record->update(['email' => $email]);
-                        }
-                    }),
+                        ->before(function (Collection $records) {
+                            foreach ($records as $record) {
+                                $i = 0;
+                                do {
+                                    $repeat = Str::repeat('*', ++$i);
+                                    $email = $repeat . $record->email;
+                                    $existe = User::withTrashed()->where('email', $email)->first();
+                                } while ($existe);
+                                $record->update(['email' => $email]);
+                            }
+                        }),
                 ]),
             ])
             ->checkIfRecordIsSelectableUsing(
