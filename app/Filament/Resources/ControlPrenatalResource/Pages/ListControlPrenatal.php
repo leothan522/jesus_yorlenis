@@ -6,7 +6,7 @@ use App\Filament\Resources\ControlPrenatalResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListControlPrenatals extends ListRecords
+class ListControlPrenatal extends ListRecords
 {
     protected static string $resource = ControlPrenatalResource::class;
 

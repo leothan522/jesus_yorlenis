@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ControlprenatalResource\Pages;
 use App\Filament\Resources\ControlprenatalResource\RelationManagers;
-use App\Filament\Resources\ControlPrenatalResource\Widgets\AntecedentesFamiliaresWidget;
 use App\Livewire\AntecedentesFamiliaresComponent;
 use App\Livewire\AntecedentesOtrosComponent;
 use App\Livewire\AntecedentesPersonalesComponent;
@@ -248,7 +247,7 @@ class ControlPrenatalResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListControlPrenatals::route('/'),
+            'index' => Pages\ListControlPrenatal::route('/'),
             'create' => Pages\CreateControlPrenatal::route('/create'),
             'view' => Pages\ViewControlPrenatal::route('/{record}'),
             'edit' => Pages\EditControlPrenatal::route('/{record}/edit'),
