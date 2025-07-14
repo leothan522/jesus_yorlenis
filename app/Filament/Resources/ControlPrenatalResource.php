@@ -9,7 +9,7 @@ use App\Livewire\AntecedentesOtrosComponent;
 use App\Livewire\AntecedentesPersonalesComponent;
 use App\Livewire\TipajeComponent;
 use App\Livewire\VacunasComponent;
-use App\Models\Controlprenatal;
+use App\Models\ControlPrenatal;
 use App\Models\Paciente;
 use App\Models\Parametro;
 use Carbon\Carbon;

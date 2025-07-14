@@ -55,7 +55,7 @@ class DashboardPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 AccessPanel::class,
-                //'verified'
+                'verified'
             ])
             ->authMiddleware([
                 Authenticate::class,
