@@ -49,6 +49,7 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('password')
                             ->label(__('Password'))
                             ->password()
+                            ->revealable()
                             ->required()
                             ->maxLength(20)
                             ->hiddenOn('edit'),

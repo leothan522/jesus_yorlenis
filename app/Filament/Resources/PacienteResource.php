@@ -38,6 +38,7 @@ class PacienteResource extends Resource
                                 Forms\Components\TextInput::make('cedula')
                                     ->label('Cédula')
                                     ->unique(ignoreRecord: true)
+                                    ->integer()
                                     ->required()
                                     ->maxLength(15),
                                 Forms\Components\TextInput::make('nombre')
