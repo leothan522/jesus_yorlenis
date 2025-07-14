@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\ControlprenatalResource\Pages;
+namespace App\Filament\Resources\ControlPrenatalResource\Pages;
 
 use App\Filament\Resources\ControlPrenatalResource;
 use App\Models\Parametro;
