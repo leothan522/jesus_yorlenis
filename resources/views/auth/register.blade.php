@@ -53,6 +53,18 @@
             </div>
         </div>
 
+        @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+            <div class="form-check has-validation">
+                <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
+                <label class="form-check-label" for="terms">
+                    {!! __('I agree to the :terms_of_service and :privacy_policy', [
+                                    'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
+                                    'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
+                            ]) !!}
+                </label>
+            </div>
+        @endif
+
         <div class="text-center pt-1 d-grid gap-2">
             <button type="submit" class="btn shadow text-white btn-block fa-lg gradient-custom-2 mb-3">{{ __('Register') }}</button>
             <a class="text-muted" href="{{ route('login') }}" onclick="verCargando()">{{ __('Already registered?') }}</a>

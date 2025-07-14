@@ -21,6 +21,11 @@ function numSizeCodigo(): int
     return $num;
 }
 
+function sweetAlert2(array $parametros = []): void
+{
+    session()->flash('sweetAlert2', $parametros);
+}
+
 function formatoMillares($cantidad, $decimal = 2): string
 {
     if (!is_numeric($cantidad)){
