@@ -141,7 +141,7 @@
                             <div class="card-body p-md-5 mx-md-4 position-relative" id="card_body">
 
                                 <div class="text-center @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-5 pt-5 @endif">
-                                    <a href="{{ route('web.index') }}" onclick="verCargando()">
+                                    <a href="{{ route('web.index') }}" onclick="verCargandoAuth(this)">
                                         <img class="img-fluid @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-sm-5 @endif" src="{{ asset('img/logo_yorlenis.png') }}" alt="Logo Morros Devops">
                                     </a>
                                     <h6 class="mt-1 mb-5 pb-1 text_title"><strong>{{ mb_strtoupper(env('APP_NAME', 'Laravel')) }}</strong></h6>
@@ -190,9 +190,20 @@
         })
     })()
 
-    function verCargando() {
-        document.querySelector("#card_body").classList.add('opacity-50');
-        document.querySelector(".verCargando").classList.remove('d-none');
+    function verCargandoAuth(enlace) {
+        event.preventDefault();
+        const card = document.querySelector("#card_body");
+        const spinner = document.querySelector(".verCargando");
+
+        card.classList.add('opacity-50');
+        spinner.classList.remove('d-none');
+
+        setTimeout(function () {
+            card.classList.remove('opacity-50');
+            spinner.classList.add('d-none');
+            //alert(enlace.href)
+            window.location.href = enlace.href;
+        }, 1000)
     }
 
     console.log('Hi!')
