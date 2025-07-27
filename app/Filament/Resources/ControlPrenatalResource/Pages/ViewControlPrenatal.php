@@ -15,15 +15,20 @@ class ViewControlPrenatal extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('imprimir')
+                ->label('Imprimir')
+                ->color('gray')
+                ->url(fn($record): string => route('export.control', $record->getKey()))
+                ->openUrlInNewTab(),
             Actions\EditAction::make(),
             Actions\DeleteAction::make()
-                ->before(function ($record){
+                ->before(function ($record) {
                     $i = 0;
-                    do{
-                        $repeat = Str::repeat('*',++$i);
+                    do {
+                        $repeat = Str::repeat('*', ++$i);
                         $string = $repeat . $record->codigo;
                         $existe = Controlprenatal::withTrashed()->where('codigo', $string)->first();
-                    }while($existe);
+                    } while ($existe);
                     $record->update(['codigo' => $string]);
                 }),
         ];
