@@ -24,14 +24,16 @@ class ExportController extends Fpdf
             return redirect()->route('web.index');
         }
 
-        $_SESSION['headerTitle'] = "Control Prenatal";
-        $_SESSION['footerClub'] = "hola mundo";
+        $_SESSION['headerTitle'] = "TARJETA DE CONTROL PRENATAL";
+        $_SESSION['footerTitle'] = "TARJETA DE CONTROL PRENATAL";
         $name = "Control_Prenatal";
 
         $pdf = new ExportController();
         $pdf->SetTitle('viewPDF');
         $pdf->AliasNbPages();
         $pdf->AddPage();
+
+        //$pdf->Cell(0, 7, 'kkkkkk', 1);
 
         $pdf->Output('I', $name . ".pdf");
         return $pdf;

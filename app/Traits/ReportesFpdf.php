@@ -11,22 +11,27 @@ trait ReportesFpdf
     function Header(): void
     {
         // Logo
-        $this->Image(asset('img/placeholder.jpg'), 10, 0);
+        $this->Image(asset('img/logo_yorlenis_mini.png'), 10, 0);
         // Arial bold 15
         $this->SetFont('Arial', 'B', 15);
-        // Movernos hacia abajo
         $this->SetY(12);
-        // Movernos a la derecha
-        $this->Cell(30);
-        // Name APP
-        $this->SetTextColor(255);
-        $this->Cell(43, 10, env('APP_NAME', 'Morros Devops'), 0, 0, 'C');
-        $this->Cell(12);
+        $this->Cell(0, 7, verUtf8('DRA.YORLENIS UZCÁTEGUI'), 0, 1, 'C');
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell(0, 5, verUtf8('GINECOLOGO-OBSTETRA-ULA'), 0, 1, 'C');
+        $this->Cell(0, 5, verUtf8('MPPS 107368-  CM3468-  CI: 15.031.268'), 0, 1, 'C');
+        $this->SetFont('Arial', 'B', 7);
+
+        $this->Cell(0, 5, verUtf8('PLANIFICACIÓN FAMILIAR, CONTROL PRENATAL, DOPPLER, ATENCIÓN DEL PARTO Y'), 0, 1, 'C');
+        $this->Cell(0, 5, verUtf8('CESAREA, BIOPSIA, MENOPAUSIA, CIRUGIA GINECOLOGICA.'), 0, 1, 'C');
+        $x = $this->GetX();
+        $y = $this->GetY();
+        $this->Line($x, $y, 200, $y);
+        $this->Ln(2);
         // Título
-        $this->SetTextColor(0);
-        $this->Cell(0, 10, $_SESSION['headerTitle'], 0, 0, 'C');
+        $this->SetFont('Arial', 'B', 15);
+        $this->Cell(0, 10, verUtf8($_SESSION['headerTitle']), 0, 1, 'C');
         // Salto de línea
-        $this->Ln(20);
+        $this->Ln(2);
     }
 
     // Pie de página
@@ -37,8 +42,8 @@ trait ReportesFpdf
         // Arial italic 8
         $this->SetFont('Arial', 'I', 7);
         $this->SetTextColor(0);
-        //Nombre club
-        $this->Cell(160, 10, env('APP_NAME', 'Morros Devops'));
+        //footer
+        $this->Cell(160, 10, verUtf8(env('APP_NAME', 'Morros Devops').' - '.$_SESSION['footerTitle']));
         $this->SetFont('Arial', 'I', 8);
         // Número de página
         $this->Cell(0, 10, verUtf8('Página ') . $this->PageNo() . '/{nb}', 0, 0, 'R');
