@@ -2,10 +2,20 @@
 
 namespace App\Traits;
 
+use App\Models\AntecedentesFamiliar;
+use App\Models\AntecedentesOtro;
+use App\Models\AntecedentesPersonal;
+use App\Models\PacienteAntFamiliar;
+use App\Models\PacienteAntOtro;
+use App\Models\PacienteAntPersonal;
+use App\Models\PacienteVacuna;
+use App\Models\Vacuna;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 trait ReportesFpdf
 {
+    public $pacientes_id;
 
     // Cabecera de página
     function Header(): void
@@ -43,76 +53,221 @@ trait ReportesFpdf
         $this->SetFont('Arial', 'I', 7);
         $this->SetTextColor(0);
         //footer
-        $this->Cell(160, 10, verUtf8(env('APP_NAME', 'Morros Devops').' - '.$_SESSION['footerTitle']));
+        $this->Cell(160, 10, verUtf8(env('APP_NAME', 'Morros Devops') . ' - ' . $_SESSION['footerTitle']));
         $this->SetFont('Arial', 'I', 8);
         // Número de página
         $this->Cell(0, 10, verUtf8('Página ') . $this->PageNo() . '/{nb}', 0, 0, 'R');
     }
 
-    protected function getCedula($participante): string
+    protected function mostarTitle($texto): string
     {
-        $cedula = $participante->cedula;
-        if (is_numeric($participante->cedula)){
-            $cedula = formatoMillares($participante->cedula, 0);
+        return verUtf8(Str::upper($texto . ':'));
+    }
+
+    protected function getCodigo($control): string
+    {
+        return verUtf8(Str::limit(Str::upper($control->codigo), 12, preserveWords: true));
+    }
+
+    protected function getCedula($control): string
+    {
+        $cedula = $control->paciente->cedula;
+        if (is_numeric($cedula)) {
+            $cedula = formatoMillares($cedula, 0);
         }
-        return Str::limit(Str::padLeft(Str::upper($cedula), 10), 12, preserveWords: true);
+        return verUtf8(Str::limit(Str::upper($cedula), 12));
     }
 
-    protected function getNombres($participante): string
+    protected function getNombre($control): string
     {
-        return verUtf8(Str::limit(Str::upper($participante->primer_nombre.' '.$participante->segundo_nombre),20));
+        return verUtf8(Str::limit(Str::upper($control->paciente->nombre), 43));
     }
 
-    protected function getPrimerNombre($participante): string
+    protected function getFechaNac($control): string
     {
-        return verUtf8(Str::limit(Str::upper($participante->primer_nombre),20));
-    }
-
-    protected function getSegundoNombre($participante): string
-    {
-        return verUtf8(Str::limit(Str::upper($participante->segundo_nombre ?? ''),20));
-    }
-
-    protected function getApellidos($participante): string
-    {
-        return verUtf8(Str::limit(Str::upper($participante->primer_apellido.' '.$participante->segundo_apellido),20));
-    }
-
-    protected function getPrimerApellido($participante): string
-    {
-        return verUtf8(Str::limit(Str::upper($participante->primer_apellido),20));
-    }
-
-    protected function getSegundoApellido($participante): string
-    {
-        return verUtf8(Str::limit(Str::upper($participante->segundo_apellido ?? ''),20));
-    }
-
-    protected function getFechaNac($participante): string
-    {
-        if (!empty($participante->fecha_nacimiento)){
-            return getFecha($participante->fecha_nacimiento);
+        $fecha = '';
+        if (!empty($control->paciente->fecha_nacimiento)) {
+            $fecha = getFecha($control->paciente->fecha_nacimiento);
         }
-        return '';
+        return Str::limit(Str::upper($fecha), 12);
     }
 
-    protected function getSexo($paticipante): string
+    protected function getEdad($control): string
     {
-        $opciones =[
-            0 => 'Masculino',
-            1 => 'Femenino'
-        ];
-        return verUtf8(Str::upper($opciones[$paticipante->sexo] ?? ''));
+        $edad = $control->paciente->edad;
+        if (!empty($control->paciente->fecha_nacimiento)) {
+            $edad = Carbon::parse($control->paciente->fecha_nacimiento)->age;
+        }
+        return Str::limit(Str::upper(formatoMillares($edad, 0)), 12);
     }
 
-    protected function getEmail($participante): string
+    protected function getTelefono($control): string
     {
-        return verUtf8(Str::limit(Str::upper($participante->email ?? ''),20));
+        return verUtf8(Str::limit(Str::upper($control->paciente->telefono ?? ''), 30));
     }
 
-    protected function getTelefono($participante): string
+    protected function getDireccion($control): string
     {
-        return verUtf8(Str::limit(Str::upper($participante->telefono ?? ''),20));
+        return Str::limit(Str::upper($control->paciente->direccion ?? ''), 73);
     }
+
+    protected function getFUR($control): string
+    {
+        $fecha = '';
+        if (!empty($control->paciente->fur)) {
+            $fecha = getFecha($control->paciente->fur);
+        }
+        return Str::limit(Str::upper($fecha), 12);
+    }
+
+    protected function getFPP($control): string
+    {
+        $fecha = '';
+        if (!empty($control->paciente->fpp)) {
+            $fecha = getFecha($control->paciente->fpp);
+        }
+        return Str::limit(Str::upper($fecha), 12);
+    }
+
+    protected function getGestas($control): string
+    {
+        $numero = '';
+        if (!empty($control->paciente->gestas)) {
+            $numero = $this->setNumero($control->paciente->gestas);
+        }
+        return $numero;
+    }
+
+    protected function getPartos($control): string
+    {
+        $numero = '';
+        if (!empty($control->paciente->partos)) {
+            $numero = $this->setNumero($control->paciente->partos);
+        }
+        return $numero;
+    }
+
+    protected function getCesareas($control): string
+    {
+        $numero = '';
+        if (!empty($control->paciente->cesareas)) {
+            $numero = $this->setNumero($control->paciente->cesareas);
+        }
+        return $numero;
+    }
+
+    protected function getAbortos($control): string
+    {
+        $numero = '';
+        if (!empty($control->paciente->abortos)) {
+            $numero = $this->setNumero($control->paciente->abortos);
+        }
+        return $numero;
+    }
+
+    protected function setNumero($numero): string
+    {
+        return '' . cerosIzquierda(formatoMillares($numero, 0));
+    }
+
+    protected function getAntFamiliares()
+    {
+        $antecedentes = AntecedentesFamiliar::all();
+        $antecedentes->each(function ($antecedente) {
+            $existe = PacienteAntFamiliar::where('pacientes_id', $this->pacientes_id)
+                ->where('antecedentes_id', $antecedente->id)
+                ->first();
+            if ($existe) {
+                $antecedente->SI = 'X';
+                $antecedente->NO = '';
+                $antecedente->otro = $existe->texto ?? '';
+            } else {
+                $antecedente->SI = '';
+                $antecedente->NO = 'X';
+                $antecedente->otro = '';
+            }
+        });
+        return $antecedentes;
+    }
+
+    protected function getAntPersonales()
+    {
+        $antecedentes = AntecedentesPersonal::all();
+        $antecedentes->each(function ($antecedente) {
+            $existe = PacienteAntPersonal::where('pacientes_id', $this->pacientes_id)
+                ->where('antecedentes_id', $antecedente->id)
+                ->first();
+            if ($existe) {
+                $antecedente->SI = 'X';
+                $antecedente->NO = '';
+                $antecedente->otro = $existe->texto ?? '';
+            } else {
+                $antecedente->SI = '';
+                $antecedente->NO = 'X';
+                $antecedente->otro = '';
+            }
+        });
+        return $antecedentes;
+    }
+
+    protected function getAntOtros()
+    {
+        $antecedentes = AntecedentesOtro::all();
+        $antecedentes->each(function ($antecedente) {
+            $existe = PacienteAntOtro::where('pacientes_id', $this->pacientes_id)
+                ->where('antecedentes_id', $antecedente->id)
+                ->first();
+            if ($existe) {
+                $antecedente->SI = 'X';
+                $antecedente->NO = '';
+                $antecedente->otro = $existe->texto ?? '';
+            } else {
+                $antecedente->SI = '';
+                $antecedente->NO = 'X';
+                $antecedente->otro = '';
+            }
+        });
+        return $antecedentes;
+    }
+
+    protected function getVacunas()
+    {
+        $vacunas = Vacuna::all();
+        $vacunas->each(function ($vacuna) {
+            $existe = PacienteVacuna::where('pacientes_id', $this->pacientes_id)
+                ->where('vacunas_id', $vacuna->id)->first();
+            if ($existe) {
+                $vacuna->dosis_1 = $existe->dosis_1 ? getFecha($existe->dosis_1) : '';
+                $vacuna->dosis_2 = $existe->dosis_2 ? getFecha($existe->dosis_2) : '';
+                $vacuna->refuerzo = $existe->refuerzo ? getFecha($existe->refuerzo) : '';
+            } else {
+                $vacuna->dosis_1 = '';
+                $vacuna->dosis_2 = '';
+                $vacuna->refuerzo = '';
+            }
+        });
+        return $vacunas;
+    }
+
+    protected function getAntenecente($antecedente, $limit = null): string
+    {
+        return verUtf8(Str::limit(Str::upper($antecedente), $limit ?? 12));
+    }
+
+    protected function getTipajeMadre($control): string
+    {
+        return verUtf8(Str::limit(Str::upper($control->paciente->tipaje->madre ?? ''), 12));
+    }
+
+    protected function getTipajePadre($control): string
+    {
+        return verUtf8(Str::limit(Str::upper($control->paciente->tipaje->padre ?? ''), 12));
+    }
+
+    protected function getTipajeSensibilidad($control): string
+    {
+        return verUtf8(Str::limit(Str::upper($control->paciente->tipaje->sensibilidad.' hola mundp como' ?? ''), 9));
+    }
+
 
 }

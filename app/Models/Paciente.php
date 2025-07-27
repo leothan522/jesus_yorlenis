@@ -29,7 +29,7 @@ class Paciente extends Model
 
     public function tipaje(): HasOne
     {
-        return $this->hasOne(Tipaje::class, 'pacientes_id', 'id');
+        return $this->hasOne(PacienteTipaje::class, 'pacientes_id', 'id');
     }
 
     public function vacunas(): HasMany

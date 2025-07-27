@@ -343,7 +343,7 @@ class ControlPrenatalResource extends Resource
                                                 ->copyable()
                                                 ->color('primary'),
                                             TextEntry::make('paciente.partos')
-                                                ->label('partos')
+                                                ->label('Partos')
                                                 ->formatStateUsing(fn(string $state): string => mb_strtoupper($state))
                                                 ->weight(FontWeight::Bold)
                                                 ->copyable()
