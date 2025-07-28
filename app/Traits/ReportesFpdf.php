@@ -108,7 +108,7 @@ trait ReportesFpdf
 
     protected function getDireccion($control): string
     {
-        return Str::limit(Str::upper($control->paciente->direccion ?? ''), 73);
+        return verUtf8(Str::limit(Str::upper($control->paciente->direccion ?? ''), 73));
     }
 
     protected function getFUR($control): string

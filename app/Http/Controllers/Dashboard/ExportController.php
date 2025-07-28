@@ -29,7 +29,7 @@ class ExportController extends Fpdf
         $this->pacientes_id = $id;
         $_SESSION['headerTitle'] = "TARJETA DE CONTROL PRENATAL";
         $_SESSION['footerTitle'] = "TARJETA DE CONTROL PRENATAL";
-        $name = "Control_Prenatal";
+        $name = "Control_Prenatal_".$control->codigo;
 
         $pdf = new ExportController();
         $pdf->SetTitle('viewPDF');
