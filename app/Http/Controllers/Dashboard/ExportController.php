@@ -228,15 +228,37 @@ class ExportController extends Fpdf
         $pdf->Cell(20, 7, $this->getTipajeSensibilidad($control), 1, 'C');
         $pdf->Cell(0, 7, '', 0, 1);
 
-
-
-
-
         $pdf->SetY($ultima);
+        $pdf->Ln(7);
 
-       /* $pdf->Ln(5);
+        //CONTROL ITEMS
+        $pdf->SetFont('Times', 'B', 9);
+        $pdf->Cell(27, 7, 'FECHA', 1, 0, 'C', 1);
+        $pdf->Cell(22, 7, 'EDAD GEST.', 1, 0, 'C', 1);
+        $pdf->Cell(15, 7, 'PESO', 1, 0, 'C', 1);
+        $pdf->Cell(15, 7, 'TA', 1, 0, 'C', 1);
+        $pdf->Cell(15, 7, 'AU', 1, 0, 'C', 1);
+        $pdf->Cell(24, 7, 'PRES', 1, 0, 'C', 1);
+        $pdf->Cell(15, 7, 'FCF', 1, 0, 'C', 1);
+        $pdf->Cell(27, 7, 'MOV FETALES', 1, 0, 'C', 1);
+        $pdf->Cell(15, 7, 'DU', 1, 0, 'C', 1);
+        $pdf->Cell(15, 7, 'EDEMA', 1, 1, 'C', 1);
+
+        $pdf->SetFont('Times', '', 9);
+
+        $pdf->Cell(27, 7, '21/02/1989', 1, 0, 'C');
+        $pdf->Cell(22, 7, '999.999', 1, 0, 'C');
+        $pdf->Cell(15, 7, '999.99', 1, 0, 'C');
+        $pdf->Cell(15, 7, '999', 1, 0, 'C');
+        $pdf->Cell(15, 7, '999', 1, 0, 'C');
+        $pdf->Cell(24, 7, 'TEXTO', 1, 0, 'C');
+        $pdf->Cell(15, 7, '999', 1, 0, 'C');
+        $pdf->Cell(27, 7, 'SI', 1, 0, 'C');
+        $pdf->Cell(15, 7, 'SI', 1, 0, 'C');
+        $pdf->Cell(15, 7, 'NO', 1, 1, 'C');
+
         $pdf->Cell(0, 7, $this->getCodigo($control), 1, 1);
-        $pdf->Cell(0, 7, $this->getCodigo($control), 1, 1);*/
+        $pdf->Cell(0, 7, $this->getCodigo($control), 1, 1);
 
         $pdf->Output('I', $name . ".pdf");
         return $pdf;
