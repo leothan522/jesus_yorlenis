@@ -67,7 +67,8 @@ class ItemsRelationManager extends RelationManager
             ->recordTitleAttribute('fecha')
             ->columns([
                 Tables\Columns\TextColumn::make('fecha')
-                    ->date(),
+                    ->date()
+                    ->grow(false),
                 Tables\Columns\TextColumn::make('edad_gestacional')
                     ->label('Edad Gest.')
                     ->numeric()

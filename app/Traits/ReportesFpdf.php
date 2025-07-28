@@ -266,7 +266,7 @@ trait ReportesFpdf
 
     protected function getTipajeSensibilidad($control): string
     {
-        return verUtf8(Str::limit(Str::upper($control->paciente->tipaje->sensibilidad.' hola mundp como' ?? ''), 9));
+        return verUtf8(Str::limit(Str::upper($control->paciente->tipaje->sensibilidad ?? ''), 9));
     }
 
 
