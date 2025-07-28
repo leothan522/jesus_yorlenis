@@ -18,7 +18,6 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Livewire;
@@ -27,13 +26,10 @@ use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
-use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
 class ControlPrenatalResource extends Resource
@@ -246,7 +242,7 @@ class ControlPrenatalResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ItemsRelationManager::class,
         ];
     }
 
@@ -371,9 +367,12 @@ class ControlPrenatalResource extends Resource
                 Section::make('Antecedentes')
                     ->schema([
                         Split::make([
-                            Livewire::make(AntecedentesFamiliaresComponent::class),
-                            Livewire::make(AntecedentesPersonalesComponent::class),
+                            Livewire::make(AntecedentesFamiliaresComponent::class)
+                                ->key('antecedentes-familiares'),
+                            Livewire::make(AntecedentesPersonalesComponent::class)
+                                ->key('antecedentes-personales'),
                             Livewire::make(AntecedentesOtrosComponent::class)
+                                ->key('antecedentes-otros'),
                         ])
                             ->from('sm')
                             ->columnSpanFull()
@@ -389,11 +388,13 @@ class ControlPrenatalResource extends Resource
                             Section::make('Vacunas')
                                 ->schema([
                                     Livewire::make(VacunasComponent::class)
+                                        ->key('vacunas'),
                                 ])
                                 ->collapsible()
                                 ->columnSpan(['sm' => 2])
                                 ->compact(),
-                            Livewire::make(TipajeComponent::class),
+                            Livewire::make(TipajeComponent::class)
+                                ->key('tipaje'),
                         ]),
                 ])
                     ->from('sm')
