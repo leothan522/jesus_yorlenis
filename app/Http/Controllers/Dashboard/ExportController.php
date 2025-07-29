@@ -28,6 +28,7 @@ class ExportController extends Fpdf
 
         $this->pacientes_id = $id;
         $_SESSION['headerTitle'] = "TARJETA DE CONTROL PRENATAL";
+        $_SESSION['headerQR'] = route('export.control', $control->id);
         $_SESSION['footerTitle'] = "TARJETA DE CONTROL PRENATAL";
         $name = "Control_Prenatal_".$control->codigo;
 
@@ -246,19 +247,102 @@ class ExportController extends Fpdf
 
         $pdf->SetFont('Times', '', 9);
 
-        $pdf->Cell(27, 7, '21/02/1989', 1, 0, 'C');
-        $pdf->Cell(22, 7, '999.999', 1, 0, 'C');
-        $pdf->Cell(15, 7, '999.99', 1, 0, 'C');
-        $pdf->Cell(15, 7, '999', 1, 0, 'C');
-        $pdf->Cell(15, 7, '999', 1, 0, 'C');
-        $pdf->Cell(24, 7, 'TEXTO', 1, 0, 'C');
-        $pdf->Cell(15, 7, '999', 1, 0, 'C');
-        $pdf->Cell(27, 7, 'SI', 1, 0, 'C');
-        $pdf->Cell(15, 7, 'SI', 1, 0, 'C');
-        $pdf->Cell(15, 7, 'NO', 1, 1, 'C');
+        $i = 0;
+        $data = [];
+
+        foreach ($this->getControlItems($control) as $item){
+            $i++;
+            if (!empty($item->sintomas) || !empty($item->observaciones)){
+                $data[] = [
+                    'fecha' => $item->fecha,
+                    'sintomas' => $item->sintomas,
+                    'observaciones' => $item->observaciones
+                ];
+            }
+            if ($i == 10){
+                $pdf->SetFont('Times', 'B', 9);
+                $pdf->Cell(27, 7, 'FECHA', 1, 0, 'C', 1);
+                $pdf->Cell(22, 7, 'EDAD GEST.', 1, 0, 'C', 1);
+                $pdf->Cell(15, 7, 'PESO', 1, 0, 'C', 1);
+                $pdf->Cell(15, 7, 'TA', 1, 0, 'C', 1);
+                $pdf->Cell(15, 7, 'AU', 1, 0, 'C', 1);
+                $pdf->Cell(24, 7, 'PRES', 1, 0, 'C', 1);
+                $pdf->Cell(15, 7, 'FCF', 1, 0, 'C', 1);
+                $pdf->Cell(27, 7, 'MOV FETALES', 1, 0, 'C', 1);
+                $pdf->Cell(15, 7, 'DU', 1, 0, 'C', 1);
+                $pdf->Cell(15, 7, 'EDEMA', 1, 1, 'C', 1);
+
+                $pdf->SetFont('Times', '', 9);
+            }
+
+            $pdf->Cell(27, 7, $this->getItemFecha($item->fecha), 1, 0, 'C');
+            $pdf->Cell(22, 7, $this->getitemNumero($item->edad_gestacional), 1, 0, 'C');
+            $pdf->Cell(15, 7, $this->getitemNumero($item->peso, 2), 1, 0, 'C');
+            $pdf->Cell(15, 7, $this->getitemNumero($item->ta), 1, 0, 'C');
+            $pdf->Cell(15, 7, $this->getitemNumero($item->au), 1, 0, 'C');
+            $pdf->Cell(24, 7, $this->getItemTexto($item->pres), 1, 0, 'C');
+            $pdf->Cell(15, 7, $this->getitemNumero($item->fcf), 1, 0, 'C');
+            $pdf->Cell(27, 7, $this->getItemBool($item->mov_fetales), 1, 0, 'C');
+            $pdf->Cell(15, 7, $this->getItemBool($item->du), 1, 0, 'C');
+            $pdf->Cell(15, 7, $this->getItemBool($item->edema), 1, 1, 'C');
+        }
+
+        for ($i; $i < 10 ; $i++){
+            $pdf->Cell(27, 7, '', 1, 0, 'C');
+            $pdf->Cell(22, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(24, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(27, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 1, 'C');
+        }
+
+        if ($i > 10){
+            $pdf->Cell(27, 7, '', 1, 0, 'C');
+            $pdf->Cell(22, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(24, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(27, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '', 1, 0, 'C');
+            $pdf->Cell(15, 7, '222', 1, 1, 'C');
+        }
+
+        $pdf->Ln(7);
+
+        //CONTROL ITEMS
+        $pdf->SetFont('Times', 'B', 9);
+        $pdf->Cell(30, 7, 'FECHA', 1, 0, 'C', 1);
+        $pdf->Cell(80, 7, 'SINTOMAS', 1, 0, 'C', 1);
+        $pdf->Cell(80, 7, 'OBSERVACIONES', 1, 1, 'C', 1);
+
+        $pdf->SetFont('Times', '', 9);
+
+        foreach ($data as $item){
+            $pdf->Cell(30, 7, $this->getItemFecha($item['fecha']), 1, 0, 'C');
+            $pdf->Cell(80, 7, $this->getItemTexto($item['sintomas'], 37), 1, 0);
+            $pdf->Cell(80, 7, $this->getItemTexto($item['observaciones'], 37), 1, 1);
+        }
+
+        for ($i = 0; $i < 3 ; $i++){
+            $pdf->Cell(30, 7, '', 1, 0, 'C');
+            $pdf->Cell(80, 7, '', 1, 0);
+            $pdf->Cell(80, 7, '', 1, 1);
+        }
+
 
         $pdf->Cell(0, 7, $this->getCodigo($control), 1, 1);
-        $pdf->Cell(0, 7, $this->getCodigo($control), 1, 1);
+
+        // Code QR
+        $pdf->SetY(-42);
+        $y = $pdf->GetY();
+        $pdf->SetFont('Times', 'B', 9);
+        $pdf->MultiCell(0, 7, $this->getMensajeDespedida(), 1, 'C', 1);
 
         $pdf->Output('I', $name . ".pdf");
         return $pdf;

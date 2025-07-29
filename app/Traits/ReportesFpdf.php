@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\AntecedentesFamiliar;
 use App\Models\AntecedentesOtro;
 use App\Models\AntecedentesPersonal;
+use App\Models\ControlPrenatalItem;
 use App\Models\PacienteAntFamiliar;
 use App\Models\PacienteAntOtro;
 use App\Models\PacienteAntPersonal;
@@ -12,6 +13,7 @@ use App\Models\PacienteVacuna;
 use App\Models\Vacuna;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use function Pest\Laravel\get;
 
 trait ReportesFpdf
 {
@@ -22,6 +24,7 @@ trait ReportesFpdf
     {
         // Logo
         $this->Image(asset('img/logo_yorlenis_mini.png'), 10, 0);
+        $this->Image(qrCodeGenerateFPDF($_SESSION['headerQR']), 170, 5, 30, 30);
         // Arial bold 15
         $this->SetFont('Arial', 'B', 15);
         $this->SetY(12);
@@ -267,6 +270,41 @@ trait ReportesFpdf
     protected function getTipajeSensibilidad($control): string
     {
         return verUtf8(Str::limit(Str::upper($control->paciente->tipaje->sensibilidad ?? ''), 9));
+    }
+
+    protected function getControlItems($control)
+    {
+        return ControlPrenatalItem::where('control_id', $control->id)->get();
+    }
+
+    protected function getItemFecha($fecha): string
+    {
+        return getFecha($fecha);
+    }
+
+    protected function getitemNumero($numero, $decimales = 0): string
+    {
+        return Str::padLeft(formatoMillares($numero, $decimales), 10);
+    }
+
+    protected function getItemTexto($texto, $limit = 10): string
+    {
+        return verUtf8(Str::limit(Str::upper($texto), $limit));
+    }
+
+    protected function getItemBool($bool): string
+    {
+        $response = 'NO';
+        if ($bool){
+            $response = 'SI';
+        }
+        return $response;
+    }
+
+    protected function getMensajeDespedida(): string
+    {
+        $texto = 'GRACIAS POR CONFIAR  SU CUIDADO Y EL DE SU HIJO. MI OBJETIVO ES MANTENER UNA MADRE SANA Y LOGRAR UN NIÑO SALUDABLE, ESTO DEPENDE DE LOS CUIDADOS QUE USTED Y YO REALICEMOS';
+        return verUtf8(Str::upper($texto));
     }
 
 
