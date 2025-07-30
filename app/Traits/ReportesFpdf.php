@@ -10,6 +10,7 @@ use App\Models\PacienteAntFamiliar;
 use App\Models\PacienteAntOtro;
 use App\Models\PacienteAntPersonal;
 use App\Models\PacienteVacuna;
+use App\Models\Parametro;
 use App\Models\Vacuna;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -53,10 +54,11 @@ trait ReportesFpdf
         // Posición: a 1,5 cm del final
         $this->SetY(-15);
         // Arial italic 8
-        $this->SetFont('Arial', 'I', 7);
+        $this->SetFont('Arial', 'BI', 10);
         $this->SetTextColor(0);
         //footer
-        $this->Cell(160, 10, verUtf8(env('APP_NAME', 'Morros Devops') . ' - ' . $_SESSION['footerTitle']));
+        //$this->Cell(160, 10, verUtf8(env('APP_NAME', 'Morros Devops') . ' - ' . $_SESSION['footerTitle']));
+        $this->Cell(160, 10,  $this->getMensjeFooter());
         $this->SetFont('Arial', 'I', 8);
         // Número de página
         $this->Cell(0, 10, verUtf8('Página ') . $this->PageNo() . '/{nb}', 0, 0, 'R');
@@ -301,11 +303,34 @@ trait ReportesFpdf
         return $response;
     }
 
-    protected function getMensajeDespedida(): string
+    protected function getMensajeFinal(): string
     {
-        $texto = 'GRACIAS POR CONFIAR  SU CUIDADO Y EL DE SU HIJO. MI OBJETIVO ES MANTENER UNA MADRE SANA Y LOGRAR UN NIÑO SALUDABLE, ESTO DEPENDE DE LOS CUIDADOS QUE USTED Y YO REALICEMOS';
+        $texto = 'GRACIAS POR CONFIAR SU CUIDADO Y EL DE SU HIJO. MI OBJETIVO ES MANTENER UNA MADRE SANA Y LOGRAR UN NIÑO SALUDABLE, ESTO DEPENDE DE LOS CUIDADOS QUE USTED Y YO REALICEMOS';
+        $parametro = Parametro::where('nombre', 'mensaje_final')->first();
+        if ($parametro && !empty($parametro->valor_texto)){
+            $texto = $parametro->valor_texto;
+        }
         return verUtf8(Str::upper($texto));
     }
 
+    protected function getMensajeEnCasoDe(): string
+    {
+        $texto = 'SANGRADO VAGINAL, PERDIDA DE LIQUIDO, DISMINUCIÓN DE MOVIMIENTOS FETALES, VISIÓN BORROSA, DOLOR DE CABEZA, CAÍDAS, CONTRACCIONES O CÓLICOS, FIEBRE.';
+        $parametro = Parametro::where('nombre', 'mensaje_en_caso_de')->first();
+        if ($parametro && !empty($parametro->valor_texto)){
+            $texto = $parametro->valor_texto;
+        }
+        return verUtf8(Str::upper($texto));
+    }
+
+    protected function getMensjeFooter(): string
+    {
+        $texto = 'ASISTE A TU CONTROL CON REGULARIDAD, AGENDA TU CITA: 0424-7125267';
+        $parametro = Parametro::where('nombre', 'mensaje_footer')->first();
+        if ($parametro && !empty($parametro->valor_texto)){
+            $texto = $parametro->valor_texto;
+        }
+        return verUtf8(Str::upper($texto));
+    }
 
 }

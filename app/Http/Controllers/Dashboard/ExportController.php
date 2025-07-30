@@ -29,7 +29,7 @@ class ExportController extends Fpdf
         $this->pacientes_id = $id;
         $_SESSION['headerTitle'] = "TARJETA DE CONTROL PRENATAL";
         $_SESSION['headerQR'] = route('export.control', $control->id);
-        $_SESSION['footerTitle'] = "TARJETA DE CONTROL PRENATAL";
+        $_SESSION['footerTitle'] = $this->getMensjeFooter();
         $name = "Control_Prenatal_".$control->codigo;
 
         $pdf = new ExportController();
@@ -37,7 +37,8 @@ class ExportController extends Fpdf
         $pdf->AliasNbPages();
         $pdf->AddPage();
 
-        $pdf->SetFillColor(250, 152, 135);
+        //$pdf->SetFillColor(250, 152, 135);
+        $pdf->SetFillColor(217, 217, 217);
 
         //Datos Básicos
         $pdf->SetFont('Times', 'B', 10);
@@ -335,14 +336,42 @@ class ExportController extends Fpdf
             $pdf->Cell(80, 7, '', 1, 1);
         }
 
+        $pdf->Ln(7);
 
-        $pdf->Cell(0, 7, $this->getCodigo($control), 1, 1);
+        //control de citas
+        $pdf->SetFont('Times', 'BU', 10);
+        $pdf->Cell(60, 7, 'CONTROL DE CITAS', 0, 1, 'C');
+        $pdf->SetFont('Times', '', 9);
+        $pdf->Cell(30, 7, 'FECHA', 1, 0, 'C', 1);
+        $pdf->Cell(30, 7, 'FECHA', 1, 0, 'C', 1);
+        $pdf->Cell(10, 7, '');
+        $x = $pdf->GetX();
+        $pdf->SetFont('Times', 'BU', 10);
+        $pdf->Cell(0, 7, 'DEBES CONSULTAR DE INMEDIATO (URGENTE) EN CASO DE:', 0, 1);
+        $y = $pdf->GetY();
+
+        $pdf->SetFont('Times', '', 9);
+        for ($i = 0; $i < 5; $i++){
+            $pdf->Cell(30, 7, '', 1);
+            $pdf->Cell(30, 7, '', 1);
+            $pdf->Cell(10, 7, '', 0, 1);
+        }
+
+        $pdf->Ln(7);
+        $y2 = $pdf->GetY();
+
+        $pdf->SetXY($x, $y);
+        $pdf->Rect($x - 3, $y - 7, 123, 42);
+        $pdf->MultiCell(117, 7, $this->getMensajeEnCasoDe(), 0);
+
+        $pdf->SetY($y2);
+        //$pdf->Cell(0, 7, $this->getCodigo($control), 1, 1);
 
         // Code QR
         $pdf->SetY(-42);
         $y = $pdf->GetY();
         $pdf->SetFont('Times', 'B', 9);
-        $pdf->MultiCell(0, 7, $this->getMensajeDespedida(), 1, 'C', 1);
+        $pdf->MultiCell(0, 7, $this->getMensajeFinal(), 1, 'C', 1);
 
         $pdf->Output('I', $name . ".pdf");
         return $pdf;
